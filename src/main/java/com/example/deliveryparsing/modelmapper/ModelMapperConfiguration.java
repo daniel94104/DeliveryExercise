@@ -1,0 +1,16 @@
+package com.example.deliveryparsing.modelmapper;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/** ModelMapper Singleton Bean */
+@Configuration
+public class ModelMapperConfiguration {
+  @Bean
+  public ModelMapper modelMapper() {
+    var modelMapper = new ModelMapper();
+    modelMapper.getConfiguration().setSkipNullEnabled(true);
+    return modelMapper;
+  }
+}
