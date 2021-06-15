@@ -36,4 +36,6 @@ public class Placement {
   @Column(nullable = false)
   @CsvBindByName(column = "cpm")
   private int costPerMile;
+
+  private int defaultCostPerUnit = 1000;
 }

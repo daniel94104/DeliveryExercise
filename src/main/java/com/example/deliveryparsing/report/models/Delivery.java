@@ -1,7 +1,7 @@
 package com.example.deliveryparsing.report.models;
 
 import java.math.BigInteger;
-import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +17,7 @@ public class Delivery {
   @OneToOne private Placement placement;
 
   @Column(nullable = false)
-  private Timestamp date;
+  private Date date;
 
-  private BigInteger impression;
+  private BigInteger impressions;
 }

@@ -24,8 +24,7 @@ public class PlacementServiceImpl implements PlacementService {
   private final @NonNull DateUtils dateUtils;
 
   @Override
-  public Optional<PlacementCreateResponse> create(
-      PlacementCreateRequest placementCreateRequest) {
+  public Optional<PlacementCreateResponse> create(PlacementCreateRequest placementCreateRequest) {
     var placement = new Placement();
     placement.setId(placementCreateRequest.getId());
     placement.setCostPerMile(placementCreateRequest.getCostPerMile());
@@ -52,5 +51,16 @@ public class PlacementServiceImpl implements PlacementService {
     var placementCreateResponse = new PlacementCreateResponse();
     modelMapper.map(placement, placementCreateResponse);
     return Optional.of(placementCreateResponse);
+  }
+
+  @Override
+  public Optional<Placement> findById(long id) {
+    var placementFindResult = placementRepository.findById(id);
+    if (placementFindResult.isEmpty()) {
+      logger.error("Unable to find the placement with id: " + id);
+      return Optional.empty();
+    }
+
+    return Optional.of(placementFindResult.get());
   }
 }
