@@ -12,10 +12,6 @@ public class ModelMapperConfiguration {
   public ModelMapper modelMapper() {
     var modelMapper = new ModelMapper();
     modelMapper.getConfiguration().setSkipNullEnabled(true);
-    modelMapper
-        .getConfiguration()
-        .setFieldAccessLevel(AccessLevel.PRIVATE)
-        .setFieldMatchingEnabled(true);
     return modelMapper;
   }
 }

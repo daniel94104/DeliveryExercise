@@ -13,56 +13,56 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
   <div class="container">
-    <img class="fluid-img lt" src="https://www.centro.net/wp-content/themes/centro/images/logo-wht-01.png" alt="Centro logo" height="50px">
+    <img class="fluid-img lt"
+         src="https://www.centro.net/wp-content/themes/centro/images/logo-wht-01.png"
+         alt="Centro logo" height="50px">
     <a class="navbar-brand" href="/">Centro - Delivery Parsing</a>
   </div>
 </nav>
 
 <div class="container-fluid">
-  <div class="card w-75 mx-auto">
-    <div class="card-header">
-      Default Report
+  <div class="container">
+    <div class="card w-75 mx-auto" style="margin: 20px">
+      <div class="card-header">
+        Default Report
+      </div>
+      <div class="card-body">
+        <button class="btn btn-primary" type="submit">Generate</button>
+      </div>
     </div>
-    <button class="btn btn-primary" type="submit">Submit form</button>
-  </div>
-  <div class="card w-75 mx-auto">
-    <div class="card-header">
-      Date Range Report
-    </div>
-    <div class="card-body">
-      <form method="get" th:object="${dateRangeReportRequest}" th:action="@{/time_range_report}">
-        <div class="form-group">
-          <div class="col-md-8">
-            <label for="startDate">Delivery Start Date</label>
-            <div class="input-group date">
-              <input type="text" class="form-control" id="startDate" autocomplete="off" th:field="*{startDate}" />
-              <div class="input-group-append">
-                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+    <div class="card w-75 mx-auto" style="margin: 20px">
+      <div class="card-header">
+        Date Range Report
+      </div>
+      <div class="card-body">
+        <form method="get" action="#" th:object="${dateRangeReportRequest}" th:action="@{/time_range_report}">
+          <div class="form-group">
+            <div class="col-md-8">
+              <label for="startDate">Delivery Start Date</label>
+              <div class="input-group date">
+                <input type="text" class="form-control" id="startDate" autocomplete="off"
+                       th:field="*{startDate}"/>
+                <div class="input-group-append">
+                  <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-8">
-            <label for="endDate">Delivery End Date</label>
-            <div class="input-group date">
-              <input type="text" class="form-control" id="endDate" autocomplete="off" th:field="*{endDate}"/>
-              <div class="input-group-append">
-                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+          <div class="form-group">
+            <div class="col-md-8">
+              <label for="endDate">Delivery End Date</label>
+              <div class="input-group date">
+                <input type="text" class="form-control" id="endDate" autocomplete="off"
+                       th:field="*{endDate}"/>
+                <div class="input-group-append">
+                  <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <button class="btn btn-primary" type="submit">Submit form</button>
-      </form>
-    </div>
-  </div>
-  <div class="card w-75 mx-auto" th:if="${dateRangeReport.length() > 0}">
-    <div class="card-header">
-      Date Range Report Result
-    </div>
-    <div class="card-body">
-      <p th:utext="${dateRangeReport}"></p>
+          <button class="btn btn-primary" type="submit">Submit form</button>
+        </form>
+      </div>
     </div>
   </div>
 
