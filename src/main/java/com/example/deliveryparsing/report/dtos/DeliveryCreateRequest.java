@@ -11,5 +11,5 @@ public class DeliveryCreateRequest {
   @CsvBindByName(column = "date")
   private String date;
   @CsvBindByName(column = "impressions")
-  private BigInteger impressions;
+  private long impressions;
 }

@@ -4,7 +4,6 @@ import com.example.deliveryparsing.report.dtos.DateRangeReport;
 import com.example.deliveryparsing.report.dtos.DateRangeReportRequest;
 import com.example.deliveryparsing.report.dtos.DeliverySummaryCalculationRequest;
 import com.example.deliveryparsing.report.dtos.ReportItem;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +50,9 @@ public class ReportServiceImpl implements ReportService {
           calculateDeliveryTotalCost(
               deliverySummary.getTotalImpressions(),
               placement.getCostPerMile(),
-              placement.getCostPerMile());
-      reportItem.setTotalCost(totalCost.intValue());
+              placement.getDefaultCostPerUnit());
+      totalCost = Math.round(totalCost);
+      reportItem.setTotalCost(totalCost);
       reportItems.add(reportItem);
     }
 
@@ -67,28 +67,27 @@ public class ReportServiceImpl implements ReportService {
     if (aggregatedDeliveryItems.isEmpty()) {
       return dateRangeReport;
     }
-    var totalPlacementCost = new BigInteger("0");
-    var totalImpressions = new BigInteger("0");
+    var totalPlacementCost = Double.valueOf(0);
+    var totalImpressions = 0L;
     for (var aggregatedDeliveryItem : aggregatedDeliveryItems) {
       var totalCostPerPlacement =
           calculateDeliveryTotalCost(
               aggregatedDeliveryItem.getDeliveryTotalImpressions(),
               aggregatedDeliveryItem.getPlacement().getCostPerMile(),
               aggregatedDeliveryItem.getPlacement().getDefaultCostPerUnit());
-      totalPlacementCost = totalPlacementCost.add(totalCostPerPlacement);
-      totalImpressions = totalImpressions.add(aggregatedDeliveryItem.getDeliveryTotalImpressions());
+      totalPlacementCost = totalPlacementCost + totalCostPerPlacement;
+      totalImpressions = totalImpressions + aggregatedDeliveryItem.getDeliveryTotalImpressions();
     }
     dateRangeReport.setStartDate(dateRangeReportRequest.getStartDate());
     dateRangeReport.setEndDate(dateRangeReportRequest.getEndDate());
     dateRangeReport.setTotalImpressions(totalImpressions);
-    dateRangeReport.setTotalCost(totalPlacementCost.intValue());
+    var roundedTotalPlacementCost = Math.round(totalPlacementCost);
+    dateRangeReport.setTotalCost(roundedTotalPlacementCost);
     return dateRangeReport;
   }
 
-  private BigInteger calculateDeliveryTotalCost(
-      BigInteger totalImpressions, int costPerMile, int defaultCostPerUnit) {
-    return totalImpressions
-        .divide(new BigInteger(String.valueOf(defaultCostPerUnit)))
-        .multiply(new BigInteger(String.valueOf(costPerMile)));
+  private double calculateDeliveryTotalCost(
+      long totalImpressions, int costPerMile, int defaultCostPerUnit) {
+    return totalImpressions * (double)costPerMile / defaultCostPerUnit;
   }
 }

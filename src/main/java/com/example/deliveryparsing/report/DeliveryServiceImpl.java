@@ -80,7 +80,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     deliverySummary.setEndDate(lastPlacement.getDate());
     for (var delivery : deliveriesForPlacement) {
       deliverySummary.setTotalImpressions(
-          delivery.getImpressions().add(deliverySummary.getTotalImpressions()));
+          delivery.getImpressions() + deliverySummary.getTotalImpressions());
     }
     deliverySummary.setPlacementName(deliverySummaryCalculationRequest.getPlacementName());
     return Optional.of(deliverySummary);

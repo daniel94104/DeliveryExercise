@@ -8,5 +8,5 @@ import lombok.Data;
 public class DeliveryCreateResponse {
   private long placementId;
   private Date date;
-  private BigInteger impression;
+  private long impression;
 }

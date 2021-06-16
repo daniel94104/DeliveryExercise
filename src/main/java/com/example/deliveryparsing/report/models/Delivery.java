@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.Data;
 
 @Entity
@@ -19,5 +21,5 @@ public class Delivery {
   @Column(nullable = false)
   private Date date;
 
-  private BigInteger impressions;
+  private long impressions;
 }

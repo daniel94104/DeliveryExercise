@@ -12,12 +12,12 @@ import lombok.Data;
 public class DateRangeReport {
   private Date startDate;
   private Date endDate;
-  private BigInteger totalImpressions;
-  private int totalCost;
+  private long totalImpressions;
+  private double totalCost;
 
   @Override
   public String toString() {
-    var dateFormat = new SimpleDateFormat("MM/dd/yyyyy");
+    var dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     var numberFormat = NumberFormat.getCurrencyInstance(Locale.US);
     numberFormat.setGroupingUsed(true);
     numberFormat.setMaximumFractionDigits(0);
@@ -27,7 +27,7 @@ public class DateRangeReport {
         + "-"
         + dateFormat.format(endDate)
         + "): "
-        + decimalFormat.format(totalImpressions.intValue())
+        + decimalFormat.format(totalImpressions)
         + " impressions, "
         + numberFormat.format(totalCost);
   }
