@@ -5,6 +5,8 @@ import static com.example.deliveryparsing.report.TestingConstants.POLITICS;
 import static com.example.deliveryparsing.report.TestingConstants.SPORTS;
 import static com.example.deliveryparsing.report.TestingConstants.TRAVEL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.deliveryparsing.report.dtos.DateRangeReportRequest;
 import java.text.ParseException;
@@ -77,7 +79,7 @@ public class ReportServiceIntegrationTest {
     var dateRangeReportRequest = new DateRangeReportRequest();
     dateRangeReportRequest.setStartDate(startDate);
     dateRangeReportRequest.setEndDate(endDate);
-    var report = reportService.collectDateRangeReport(dateRangeReportRequest);
+    var report = reportService.collectDateRangeReport(dateRangeReportRequest).get();
 
     // assert
     assertEquals(TOTAL_COST, report.getTotalCost());
@@ -103,7 +105,6 @@ public class ReportServiceIntegrationTest {
     var report = reportService.collectDateRangeReport(dateRangeReportRequest);
 
     // assert
-    assertEquals(TOTAL_COST, report.getTotalCost());
-    assertEquals(TOTAL_IMPRESSIONS, report.getTotalImpressions());
+    assertTrue(report.isEmpty());
   }
 }

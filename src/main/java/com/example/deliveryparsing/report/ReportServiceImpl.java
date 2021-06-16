@@ -6,6 +6,7 @@ import com.example.deliveryparsing.report.dtos.DeliverySummaryCalculationRequest
 import com.example.deliveryparsing.report.dtos.ReportItem;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -60,12 +61,12 @@ public class ReportServiceImpl implements ReportService {
   }
 
   @Override
-  public DateRangeReport collectDateRangeReport(DateRangeReportRequest dateRangeReportRequest) {
+  public Optional<DateRangeReport> collectDateRangeReport(DateRangeReportRequest dateRangeReportRequest) {
     var aggregatedDeliveryItems =
         deliveryService.findDeliveriesWithinDateRange(dateRangeReportRequest);
     var dateRangeReport = new DateRangeReport();
     if (aggregatedDeliveryItems.isEmpty()) {
-      return dateRangeReport;
+      return Optional.empty();
     }
     var totalPlacementCost = Double.valueOf(0);
     var totalImpressions = 0L;
@@ -83,7 +84,7 @@ public class ReportServiceImpl implements ReportService {
     dateRangeReport.setTotalImpressions(totalImpressions);
     var roundedTotalPlacementCost = Math.round(totalPlacementCost);
     dateRangeReport.setTotalCost(roundedTotalPlacementCost);
-    return dateRangeReport;
+    return Optional.of(dateRangeReport);
   }
 
   private double calculateDeliveryTotalCost(

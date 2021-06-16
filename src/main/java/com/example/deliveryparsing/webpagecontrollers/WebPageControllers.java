@@ -53,7 +53,9 @@ public class WebPageControllers {
     var startDate = simepleDateFormat.format(dateRangeReportRequest.getStartDate());
     var endDate = simepleDateFormat.format(dateRangeReportRequest.getEndDate());
     var dateRangeReport = reportService.collectDateRangeReport(dateRangeReportRequest);
-    model.addAttribute(DATE_RANGE_REPORT_ATTRIBUTE, dateRangeReport.toString());
+    model.addAttribute(DATE_RANGE_REPORT_ATTRIBUTE, "");
+    dateRangeReport.ifPresent(
+        rangeReport -> model.addAttribute(DATE_RANGE_REPORT_ATTRIBUTE, rangeReport.toString()));
     model.addAttribute(START_DATE_ATTRIBUTE, startDate);
     model.addAttribute(END_DATE_ATTRIBUTE, endDate);
     return DATE_RANGE_REPORT_VIEW;
