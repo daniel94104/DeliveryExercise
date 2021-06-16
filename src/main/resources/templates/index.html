@@ -19,17 +19,23 @@
 </nav>
 
 <div class="container-fluid">
-  <div class="card col-md-8">
+  <div class="card w-75 mx-auto">
+    <div class="card-header">
+      Default Report
+    </div>
+    <button class="btn btn-primary" type="submit">Submit form</button>
+  </div>
+  <div class="card w-75 mx-auto">
     <div class="card-header">
       Date Range Report
     </div>
     <div class="card-body">
-      <form method="post">
+      <form method="get" th:object="${dateRangeReportRequest}" th:action="@{/time_range_report}">
         <div class="form-group">
           <div class="col-md-8">
             <label for="startDate">Delivery Start Date</label>
             <div class="input-group date">
-              <input type="text" class="form-control" id="startDate" autocomplete="off"/>
+              <input type="text" class="form-control" id="startDate" autocomplete="off" th:field="*{startDate}" />
               <div class="input-group-append">
                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
               </div>
@@ -40,7 +46,7 @@
           <div class="col-md-8">
             <label for="endDate">Delivery End Date</label>
             <div class="input-group date">
-              <input type="text" class="form-control" id="endDate" autocomplete="off"/>
+              <input type="text" class="form-control" id="endDate" autocomplete="off" th:field="*{endDate}"/>
               <div class="input-group-append">
                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
               </div>
@@ -51,7 +57,14 @@
       </form>
     </div>
   </div>
-
+  <div class="card w-75 mx-auto" th:if="${dateRangeReport.length() > 0}">
+    <div class="card-header">
+      Date Range Report Result
+    </div>
+    <div class="card-body">
+      <p th:utext="${dateRangeReport}"></p>
+    </div>
+  </div>
 
 </div>
 

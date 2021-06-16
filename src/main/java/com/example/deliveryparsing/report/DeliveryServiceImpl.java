@@ -1,11 +1,14 @@
 package com.example.deliveryparsing.report;
 
+import com.example.deliveryparsing.report.dtos.AggregatedDeliveryItem;
+import com.example.deliveryparsing.report.dtos.DateRangeReportRequest;
 import com.example.deliveryparsing.report.dtos.DeliveryCreateRequest;
 import com.example.deliveryparsing.report.dtos.DeliveryCreateResponse;
 import com.example.deliveryparsing.report.dtos.DeliverySummary;
 import com.example.deliveryparsing.report.dtos.DeliverySummaryCalculationRequest;
 import com.example.deliveryparsing.report.models.Delivery;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -81,5 +84,22 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
     deliverySummary.setPlacementName(deliverySummaryCalculationRequest.getPlacementName());
     return Optional.of(deliverySummary);
+  }
+
+  @Override
+  public List<AggregatedDeliveryItem> findDeliveriesWithinDateRange(
+      DateRangeReportRequest dateRangeReportRequest) {
+    var aggregatedDeliveryItems =
+        deliveryRepository.findDeliveriesWithinDateRangeAndGroupByPlacementIdAndSumImpressions(
+            dateRangeReportRequest.getStartDate(), dateRangeReportRequest.getEndDate());
+    if (aggregatedDeliveryItems.isEmpty()) {
+      var simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+      logger.info(
+          "No delivery found within the given date range start: "
+              + simpleDateFormat.format(dateRangeReportRequest.getStartDate())
+              + " from "
+              + simpleDateFormat.format(dateRangeReportRequest.getEndDate()));
+    }
+    return aggregatedDeliveryItems;
   }
 }

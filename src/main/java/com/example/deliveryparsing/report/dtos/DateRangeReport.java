@@ -9,12 +9,10 @@ import java.util.Locale;
 import lombok.Data;
 
 @Data
-public class ReportItem {
-  private String placementName;
+public class DateRangeReport {
   private Date startDate;
   private Date endDate;
   private BigInteger totalImpressions;
-  private int costPerMile;
   private int totalCost;
 
   @Override
@@ -24,16 +22,13 @@ public class ReportItem {
     numberFormat.setGroupingUsed(true);
     numberFormat.setMaximumFractionDigits(0);
     var decimalFormat = new DecimalFormat("#,###");
-    return placementName
-        + " ("
+    return "Total ("
         + dateFormat.format(startDate)
         + "-"
         + dateFormat.format(endDate)
         + "): "
         + decimalFormat.format(totalImpressions.intValue())
-        + " impressions @ "
-        + numberFormat.format(costPerMile)
-        + " CPM = "
+        + " impressions, "
         + numberFormat.format(totalCost);
   }
 }

@@ -1,9 +1,9 @@
 package com.example.deliveryparsing.report;
 
-import com.example.deliveryparsing.report.dtos.DeliverySummary;
+import com.example.deliveryparsing.report.dtos.DateRangeReport;
+import com.example.deliveryparsing.report.dtos.DateRangeReportRequest;
 import com.example.deliveryparsing.report.dtos.DeliverySummaryCalculationRequest;
 import com.example.deliveryparsing.report.dtos.ReportItem;
-import com.example.deliveryparsing.report.models.Placement;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +26,8 @@ public class ReportServiceImpl implements ReportService {
 
   @Override
   public List<ReportItem> collectReportItems() {
-    var totalPlacements =
-        placementRepository
-            .findAll(); // if getting HUGE number of placements, need to do pagination.
+    // if getting HUGE number of placements, need to do pagination.
+    var totalPlacements = placementRepository.findAll();
     var reportItems = new ArrayList<ReportItem>();
 
     for (var placement : totalPlacements) {
@@ -48,20 +47,48 @@ public class ReportServiceImpl implements ReportService {
       var reportItem = new ReportItem();
       modelMapper.map(deliverySummary, reportItem);
       reportItem.setCostPerMile(placement.getCostPerMile());
-      var totalCost = calculateDeliveryTotalCost(placement, deliverySummary);
-      reportItem.setTotalCost(totalCost);
+      var totalCost =
+          calculateDeliveryTotalCost(
+              deliverySummary.getTotalImpressions(),
+              placement.getCostPerMile(),
+              placement.getCostPerMile());
+      reportItem.setTotalCost(totalCost.intValue());
       reportItems.add(reportItem);
     }
 
     return reportItems;
   }
 
-  private int calculateDeliveryTotalCost(Placement placement, DeliverySummary deliverySummary) {
-    var totalCost =
-        deliverySummary
-            .getTotalImpressions()
-            .divide(new BigInteger(String.valueOf(placement.getDefaultCostPerUnit())))
-            .multiply(new BigInteger(String.valueOf(placement.getCostPerMile())));
-    return totalCost.intValue();
+  @Override
+  public DateRangeReport collectDateRangeReport(DateRangeReportRequest dateRangeReportRequest) {
+    var aggregatedDeliveryItems =
+        deliveryService.findDeliveriesWithinDateRange(dateRangeReportRequest);
+    var dateRangeReport = new DateRangeReport();
+    if (aggregatedDeliveryItems.isEmpty()) {
+      return dateRangeReport;
+    }
+    var totalPlacementCost = new BigInteger("0");
+    var totalImpressions = new BigInteger("0");
+    for (var aggregatedDeliveryItem : aggregatedDeliveryItems) {
+      var totalCostPerPlacement =
+          calculateDeliveryTotalCost(
+              aggregatedDeliveryItem.getDeliveryTotalImpressions(),
+              aggregatedDeliveryItem.getPlacement().getCostPerMile(),
+              aggregatedDeliveryItem.getPlacement().getDefaultCostPerUnit());
+      totalPlacementCost = totalPlacementCost.add(totalCostPerPlacement);
+      totalImpressions = totalImpressions.add(aggregatedDeliveryItem.getDeliveryTotalImpressions());
+    }
+    dateRangeReport.setStartDate(dateRangeReportRequest.getStartDate());
+    dateRangeReport.setEndDate(dateRangeReportRequest.getEndDate());
+    dateRangeReport.setTotalImpressions(totalImpressions);
+    dateRangeReport.setTotalCost(totalPlacementCost.intValue());
+    return dateRangeReport;
+  }
+
+  private BigInteger calculateDeliveryTotalCost(
+      BigInteger totalImpressions, int costPerMile, int defaultCostPerUnit) {
+    return totalImpressions
+        .divide(new BigInteger(String.valueOf(defaultCostPerUnit)))
+        .multiply(new BigInteger(String.valueOf(costPerMile)));
   }
 }
