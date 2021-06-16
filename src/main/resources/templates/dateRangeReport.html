@@ -33,10 +33,7 @@
               <label for="startDate">Delivery Start Date</label>
               <div class="input-group date">
                 <input type="text" class="form-control" id="startDate" autocomplete="off"
-                       th:field="*{startDate}"/>
-                <div class="input-group-append">
-                  <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                </div>
+                       th:value="${startDate}"/>
               </div>
             </div>
           </div>
@@ -45,10 +42,7 @@
               <label for="endDate">Delivery End Date</label>
               <div class="input-group date">
                 <input type="text" class="form-control" id="endDate" autocomplete="off"
-                       th:field="*{endDate}"/>
-                <div class="input-group-append">
-                  <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                </div>
+                       th:value="${endDate}"/>
               </div>
             </div>
           </div>

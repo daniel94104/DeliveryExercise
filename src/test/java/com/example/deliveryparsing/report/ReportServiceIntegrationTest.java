@@ -83,4 +83,27 @@ public class ReportServiceIntegrationTest {
     assertEquals(TOTAL_COST, report.getTotalCost());
     assertEquals(TOTAL_IMPRESSIONS, report.getTotalImpressions());
   }
+
+  @Test
+  public void givenOutofRangeDate_whenCalculateDateRangeReport_thenResultEmpty()
+      throws ParseException {
+    // setup
+    final long TOTAL_IMPRESSIONS = 0;
+    final long TOTAL_COST = 0;
+    final var startDateString = "1/1/2021";
+    final var endDateString = "12/31/2021";
+    var dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    var startDate = dateFormat.parse(startDateString);
+    var endDate = dateFormat.parse(endDateString);
+
+    // when
+    var dateRangeReportRequest = new DateRangeReportRequest();
+    dateRangeReportRequest.setStartDate(startDate);
+    dateRangeReportRequest.setEndDate(endDate);
+    var report = reportService.collectDateRangeReport(dateRangeReportRequest);
+
+    // assert
+    assertEquals(TOTAL_COST, report.getTotalCost());
+    assertEquals(TOTAL_IMPRESSIONS, report.getTotalImpressions());
+  }
 }
