@@ -90,8 +90,6 @@ public class ReportServiceIntegrationTest {
   public void givenOutofRangeDate_whenCalculateDateRangeReport_thenResultEmpty()
       throws ParseException {
     // setup
-    final long TOTAL_IMPRESSIONS = 0;
-    final long TOTAL_COST = 0;
     final var startDateString = "1/1/2021";
     final var endDateString = "12/31/2021";
     var dateFormat = new SimpleDateFormat("MM/dd/yyyy");
