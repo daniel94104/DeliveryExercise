@@ -59,47 +59,14 @@ public class DeliveryServiceImpl implements DeliveryService {
   @Override
   public Optional<DeliverySummary> calculateDeliverySummary(
       DeliverySummaryCalculationRequest deliverySummaryCalculationRequest) {
-    var deliverySummary = new DeliverySummary();
-    var deliveriesForPlacement =
-        deliveryRepository.findDeliveriesByPlacementIdOrderByDateAsc(
-            deliverySummaryCalculationRequest.getPlacementId());
-
-    if (deliveriesForPlacement.isEmpty()) {
-      logger.error(
-          "No delivery found for placement : "
-              + deliverySummaryCalculationRequest.getPlacementName()
-              + " with id: "
-              + deliverySummaryCalculationRequest.getPlacementId());
-      return Optional.empty();
-    }
-
-    var firstPlacement = deliveriesForPlacement.get(0);
-    var lastPlacement = deliveriesForPlacement.get(deliveriesForPlacement.size() - 1);
-
-    deliverySummary.setStartDate(firstPlacement.getDate());
-    deliverySummary.setEndDate(lastPlacement.getDate());
-    for (var delivery : deliveriesForPlacement) {
-      deliverySummary.setTotalImpressions(
-          delivery.getImpressions() + deliverySummary.getTotalImpressions());
-    }
-    deliverySummary.setPlacementName(deliverySummaryCalculationRequest.getPlacementName());
-    return Optional.of(deliverySummary);
+    // Todo
+    return Optional.empty();
   }
 
   @Override
   public List<AggregatedDeliveryItem> findDeliveriesWithinDateRange(
       DateRangeReportRequest dateRangeReportRequest) {
-    var aggregatedDeliveryItems =
-        deliveryRepository.findDeliveriesWithinDateRangeAndGroupByPlacementIdAndSumImpressions(
-            dateRangeReportRequest.getStartDate(), dateRangeReportRequest.getEndDate());
-    if (aggregatedDeliveryItems.isEmpty()) {
-      var simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-      logger.info(
-          "No delivery found within the given date range start: "
-              + simpleDateFormat.format(dateRangeReportRequest.getStartDate())
-              + " from "
-              + simpleDateFormat.format(dateRangeReportRequest.getEndDate()));
-    }
-    return aggregatedDeliveryItems;
+    // Todo
+    return null;
   }
 }
